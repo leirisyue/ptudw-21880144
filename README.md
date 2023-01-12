@@ -3,6 +3,7 @@ template: https://htmlcodex.com/bootstrap-ecommerce-template/
 
 # npm
 sudo npm i -g sequelize-cli
+npm i -s -g pg
 
 # database
 terminal: sequelize init
@@ -11,7 +12,8 @@ terminal: sequelize init
    - seeders: example Statement
 
 # create database
-sequelize model:create --name Image --attributes name:string
+ - create table ---> sequelize model:create --name Image --attributes name:string
+ - create data in table ---> sequelize db:seed:all
 
 # install SUDO in PC
    0. Windows PowerShell
