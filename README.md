@@ -1,2 +1,22 @@
 # ptudw-21880144
-https://htmlcodex.com/bootstrap-ecommerce-template/
+template: https://htmlcodex.com/bootstrap-ecommerce-template/
+
+# npm
+sudo npm i -g sequelize-cli
+
+# database
+terminal: sequelize init
+   - config: setting connect to database
+   - models: create table
+   - seeders: example Statement
+
+# create database
+sequelize model:create --name Image --attributes name:string
+
+# install SUDO in PC
+   0. Windows PowerShell
+   1. Set-ExecutionPolicy RemoteSigned -Scope CurrentUser 
+   2. irm get.scoop.sh | iex
+   3. scoop install sudo
+   4. sudo
+
