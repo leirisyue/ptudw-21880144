@@ -20,6 +20,16 @@ app.set('view engine', 'hbs');
 // routes
 app.use('/', require('./routes/indexRouter'));
 
+app.use((req, res, next) => {
+   res.status(404).render('error', { Message: 'File not found' })
+})
+
+app.use((error, req, res, next) => {
+   console.error(error);
+   res.status(500).render('error', { Message: 'Internal Server Error' })
+})
+
+
 // start server
 app.listen(port, () => {
    console.log(`Server is running on port ${port}`)
