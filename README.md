@@ -2,8 +2,8 @@
 template: https://htmlcodex.com/bootstrap-ecommerce-template/
 
 # npm
-sudo npm i -g sequelize-cli
-npm i -s -g pg
+- sudo npm i -g sequelize-cli
+- npm i -s -g pg
 
 # database
 terminal: sequelize init
