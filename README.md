@@ -20,5 +20,5 @@ terminal: sequelize init
    1. Set-ExecutionPolicy RemoteSigned -Scope CurrentUser 
    2. irm get.scoop.sh | iex
    3. scoop install sudo
-   4. sudo
+   4. sud
 
