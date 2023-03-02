@@ -48,17 +48,24 @@ controller.show = async (req, res) => {
    res.render('product-list')
 }
 
-controller.showDetails = async (req,res)=>{
-   let id = isNan(req.params.id)? 0 : parseInt(req.param.id)
+controller.showDetails = async (req, res) => {
+   let id = isNaN(req.params.id) ? 0 : parseInt(req.params.id)
    let product = await models.Product.findOne({
-      attributes: ['id', 'name', 'stars', 'price', 'oldPrice','summary','description','specification'],
-      where: {id},
-      include:[{
-         model:models.Image,
-         attribute:['name', 'imagePath']
+      attributes: ['id', 'name', 'stars', 'price', 'oldPrice', 'summary', 'description', 'specification'],
+      where: { id },
+      include: [{
+         model: models.Image,
+         attributes: ['name', 'imagePath']
+      }, {
+         model: models.Review,
+         attributes: ['id', 'review', 'stars','createdAt'],
+         include:[{
+            model:models.User,
+            attributes:['firstName','lastName']
+         }]
       }]
    })
-   res.local.product = product
+   res.locals.product = product
    res.render('product-detail')
 }
 
