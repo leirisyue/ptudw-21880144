@@ -1,22 +1,22 @@
 let controller = {}
 const models = require('../models');
+const sequelize = require('sequelize')
+const Op = sequelize.Op
 
 
 controller.show = async (req, res) => {
-
-   //--------------------------category - right-column --------------------------
-   let categories = await models.Category.findAll({
-      inClude: [{
-         model: models.Product
-      }]
-   })
-   res.locals.categories = categories
-   //-----------------------right-column click category --------------------------
-   let category = isNaN(req.query.category) ? 0 : parseInt(req.query.category)
    let options = {
       attributes: ['id', 'name', 'imagePath', 'stars', 'price', 'oldPrice'],
       where: {}
    }
+   //--------------------------category - right-column --------------------------
+   let category = isNaN(req.query.category) ? 0 : parseInt(req.query.category)
+   let categories = await models.Category.findAll({
+      include: [{ 
+         model: models.Product
+      }]
+   })
+   res.locals.categories = categories
    if (category > 0) {
       options.where.categoryId = category
    }
@@ -42,9 +42,47 @@ controller.show = async (req, res) => {
          where: { id: tag }
       }]
    }
-   //------------------------------------product-list----------------------------
-   let products = await models.Product.findAll(options)
-   res.locals.products = products
+   //----------------------------search product----------------------------------
+   let keyword = req.query.keyword || '';
+   if (keyword.trim() != '') {
+      options.where.name = {
+         [Op.iLike]: `%${keyword}%`
+      }
+   }
+   //-------------------------------sort data------------------------------------
+   let sort = ['price', 'newest', 'popular'].includes(req.query.sort) ? req.query.sort : 'price'
+   switch (sort) {
+      case 'newest':
+         options.order = [['createdAt', 'DESC']]
+         break;
+      case 'popular':
+         options.order = [['stars', 'DESC']]
+         break;
+      default:
+         options.order = [['price', 'ASC']]
+         break;
+   }
+   res.locals.sort = sort
+   res.locals.originalUrl = removeParam('sort', req.originalUrl)
+   if(Object.keys(req.query).length == 0){
+      res.locals.originalUrl = res.locals.originalUrl + "?"
+   }
+   //--------------------------------pagination-----------------------------------
+   let page = isNaN(req.query.page) ? 1 : Math.max(1,parseInt(req.query.page))
+   const limit = 6;
+   options.limit = limit;
+   options.offset = limit * (page -1);
+   let {rows,count} = await models.Product.findAndCountAll(options);
+   res.locals.pagination ={
+      page: page,
+      limit: limit,
+      totalRows: count,
+      queryParams: req.query
+   }
+   //--------------------------------product-list---------------------------------
+   // let products = await models.Product.findAll(options)
+   // res.locals.products = products
+   res.locals.products = rows
    res.render('product-list')
 }
 
@@ -58,15 +96,49 @@ controller.showDetails = async (req, res) => {
          attributes: ['name', 'imagePath']
       }, {
          model: models.Review,
-         attributes: ['id', 'review', 'stars','createdAt'],
-         include:[{
-            model:models.User,
-            attributes:['firstName','lastName']
+         attributes: ['id', 'review', 'stars', 'createdAt'],
+         include: [{
+            model: models.User,
+            attributes: ['firstName', 'lastName']
          }]
+      },{
+         model:models.Tag,
+         attributes:['id']
       }]
    })
    res.locals.product = product
+   let tagIds = []
+   product.Tags.forEach(tag=>tagIds.push(tag.id))
+   let relateProducts = await models.Product.findAll({
+      attributes:['id','name','imagePath','oldPrice','price'],
+      include:[{
+         model:models.Tag,
+         attributes:['id'],
+         where:{
+            id:{[Op.in]:tagIds}
+         }
+      }]
+   })
+   res.locals.relateProducts = relateProducts
    res.render('product-detail')
+}
+
+function removeParam(key, sourceURL) {
+   var rtn = sourceURL.split("?")[0], param, params_arr = []
+   var queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : ""
+   if (queryString !== "") {
+      params_arr = queryString.split("&")
+      for (let i = params_arr.length - 1; i >= 0; i -= 1) {
+         param = params_arr[i].split("=")[0]
+         if (param === key) {
+            params_arr.splice(i, 1);
+         }
+      }
+      if (params_arr.length) {
+         rtn = rtn + "?" + params_arr.join("&");
+      }
+   }
+   return rtn
 }
 
 module.exports = controller;
