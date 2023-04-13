@@ -18,7 +18,6 @@
         $(window).resize(toggleNavbarMethod);
     });
     
-    
     // Back to top button
     $(window).scroll(function () {
         if ($(this).scrollTop() > 100) {
@@ -32,7 +31,6 @@
         return false;
     });
     
-    
     // Home page slider
     $('.main-slider').slick({
         autoplay: true,
@@ -44,7 +42,6 @@
         variableWidth: true
     });
     
-    
     // Product Slider 4 Column
     $('.product-slider-4').slick({
         autoplay: true,
@@ -55,31 +52,22 @@
         responsive: [
             {
                 breakpoint: 1200,
-                settings: {
-                    slidesToShow: 4,
-                }
+                settings: { slidesToShow: 4 }
             },
             {
                 breakpoint: 992,
-                settings: {
-                    slidesToShow: 3,
-                }
+                settings: { slidesToShow: 3 }
             },
             {
                 breakpoint: 768,
-                settings: {
-                    slidesToShow: 2,
-                }
+                settings: { slidesToShow: 2 }
             },
             {
                 breakpoint: 576,
-                settings: {
-                    slidesToShow: 1,
-                }
+                settings: { slidesToShow: 1 }
             },
         ]
     });
-    
     
     // Product Slider 3 Column
     $('.product-slider-3').slick({
@@ -91,25 +79,18 @@
         responsive: [
             {
                 breakpoint: 992,
-                settings: {
-                    slidesToShow: 3,
-                }
+                settings: { slidesToShow: 3 }
             },
             {
                 breakpoint: 768,
-                settings: {
-                    slidesToShow: 2,
-                }
+                settings: { slidesToShow: 2 }
             },
             {
                 breakpoint: 576,
-                settings: {
-                    slidesToShow: 1,
-                }
+                settings: { slidesToShow: 1 }
             },
         ]
     });
-    
     
     // Single Product Slider
     $('.product-slider-single').slick({
@@ -118,7 +99,6 @@
         slidesToShow: 1,
         slidesToScroll: 1
     });
-    
     
     // Brand Slider
     $('.brand-slider').slick({
@@ -133,31 +113,22 @@
         responsive: [
             {
                 breakpoint: 992,
-                settings: {
-                    slidesToShow: 4,
-                }
+                settings: { slidesToShow: 4 }
             },
             {
                 breakpoint: 768,
-                settings: {
-                    slidesToShow: 3,
-                }
+                settings: { slidesToShow: 3 }
             },
             {
                 breakpoint: 576,
-                settings: {
-                    slidesToShow: 2,
-                }
+                settings: { slidesToShow: 2 }
             },
             {
                 breakpoint: 300,
-                settings: {
-                    slidesToShow: 1,
-                }
+                settings: { slidesToShow: 1 }
             }
         ]
     });
-    
     
     // Quantity
     $('.qty button').on('click', function () {
@@ -166,15 +137,14 @@
         if ($button.hasClass('btn-plus')) {
             var newVal = parseFloat(oldValue) + 1;
         } else {
-            if (oldValue > 0) {
+            if (oldValue > 1) {
                 var newVal = parseFloat(oldValue) - 1;
             } else {
-                newVal = 0;
+                newVal = 1;
             }
         }
         $button.parent().find('input').val(newVal);
     });
-    
     
     // Shipping address show hide
     $('.checkout #shipto').change(function () {
@@ -185,7 +155,6 @@
         }
     });
     
-    
     // Payment methods show hide
     $('.checkout .payment-method .custom-control-input').change(function () {
         if ($(this).prop('checked')) {
@@ -195,4 +164,3 @@
         }
     });
 })(jQuery);
-

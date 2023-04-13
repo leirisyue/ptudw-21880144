@@ -117,7 +117,8 @@ controller.showDetails = async (req, res) => {
          where:{
             id:{[Op.in]:tagIds}
          }
-      }]
+      }],
+      limit:10
    })
    res.locals.relateProducts = relateProducts
    res.render('product-detail')
