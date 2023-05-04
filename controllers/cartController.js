@@ -44,4 +44,10 @@ controller.remove = (req.res) => {
       total: req.session.cart.total
    })
 }
+
+controller.clear = {req,res}=>{
+   req.session.cart.clear();
+   return resizeBy.sendStatus(200).end()
+}
+
 module.exports = controller
