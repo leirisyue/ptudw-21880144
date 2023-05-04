@@ -123,19 +123,20 @@
                 </div>
             </div>
             <div class="col-md-5">
-                <div class="checkout-summary">
-                    <h2>Cart Total</h2>
-                    <div class="checkout-content">
-                        <h3>Products</h3>
-                        <p>Product Name<span>$11</span></p>
-                        <p>Product Name<span>$11</span></p>
-                        <p>Product Name<span>$11</span></p>
-                        <p class="sub-total">Sub Total<span>$22</span></p>
-                        <p class="ship-cost">Shipping Cost<span>$1</span></p>
-                        <h4>Grand Total<span>$23</span></h4>
+                {{#with cart}}
+                    <div class="checkout-summary">
+                        <h2>Cart Total</h2>
+                        <div class="checkout-content">
+                            <h3>Products</h3>
+                            {{#each items}}
+                                <p>{{product.name}} x {{quantity}}<span>${{total}}</span></p>
+                            {{/each}}
+                            <p class="sub-total">Sub Total<span>${{subtotal}}</span></p>
+                            <p class="ship-cost">Shipping Cost<span>${{shipping}}</span></p>
+                            <h4>Grand Total<span>${{total}}</span></h4>
+                        </div>
                     </div>
-                </div>
-
+                {{/with}}
                 <div class="checkout-payment">
                     <h2>Payment Methods</h2>
                     <div class="payment-methods">

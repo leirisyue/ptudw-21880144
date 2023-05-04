@@ -35,7 +35,7 @@ controller.update = async (req, res) => {
    res.sendStatus(204).end()
 }
 
-controller.remove = (req.res) => {
+controller.remove = (req,res) => {
    let id = isNaN(req.body.id) ? 0 : parseInt(req.body.id)
    req.session.cart.remove(id)
    return res.json({
@@ -45,7 +45,7 @@ controller.remove = (req.res) => {
    })
 }
 
-controller.clear = {req,res}=>{
+controller.clear = (req,res)=>{
    req.session.cart.clear();
    return resizeBy.sendStatus(200).end()
 }
