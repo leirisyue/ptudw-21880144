@@ -51,9 +51,9 @@ async function removeCart(id, quantity) {
          if (json.quantity > 0) {
             document.getElementById('subtotal').innerText = `(${json.subtotal})`
             document.getElementById('total').innerText = `(${json.total})`
-            document.getElementById(`product${id}`)?.remove()
+            document.getElementById(`product${id}`).remove()
          } else {
-            document.querySelector('.cart-page .container')?.innerHTML = ` 
+            document.querySelector('.cart-page .container').innerHTML = ` 
             <div class="text-center border py-3">
                <h3>Your cart is empty !</h3>
             </div>`
@@ -72,8 +72,8 @@ async function clearCart() {
          }
       })
       if (res.status == 200) {
-         document.getElementById('cart-quantity')?.innerText = `{0}`;
-         document.querySelector('.cart-page .container')?.innerHTML = ` 
+         document.getElementById('cart-quantity').innerText = `{0}`;
+         document.querySelector('.cart-page .container').innerHTML = ` 
          <div class="text-center border py-3">
             <h3>Your cart is empty !</h3>
          </div>`

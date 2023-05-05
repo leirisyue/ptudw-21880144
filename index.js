@@ -27,6 +27,20 @@ app.engine('hbs', expressHandlebars.engine({
 
 app.set('view engine', 'hbs');
 
+
+// session
+app.use(express.json())
+app.use(express.urlencoded({extended:false}))
+app.use(session({
+   secret: 'S3crect',
+   resave: false,
+   saveUninitialized: false,
+   cookie:{
+      httpOnly: true,
+      maxAge: 20*60*1000 //20ph
+   }
+}))
+
 // middleware cart
 app.use((req,res,next)=>{
    let Cart = require('./controllers/cart')
@@ -49,18 +63,6 @@ app.use((error, req, res, next) => {
    res.status(500).render('error', { Message: 'Internal Server Error' })
 })
 
-// session
-app.use(express.json())
-app.use(express.urlencoded({extended:false}))
-app.use(session({
-   secret: 'S3crect',
-   resave: false,
-   saveUninitialized: false,
-   cookie:{
-      httpOnly: true,
-      maxAge: 20*60*1000 //20ph
-   }
-}))
 
 // start server
 app.listen(port, () => {
