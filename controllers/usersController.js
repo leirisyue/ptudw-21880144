@@ -18,7 +18,7 @@ controller.placeorders = async (req, res) => {
    // let { addressId, payment } = req.body
    let addressId = isNaN(req.body.addressId) ? 0 : parseInt(req.body.addressId)
    let address = await models.Address.findByPk(addressId);
-   if (address) {
+   if (!address) {
       address = await models.Address.create({
          firstName: req.body.firstName,
          lastName: req.body.lastName,
@@ -50,14 +50,14 @@ controller.placeorders = async (req, res) => {
 
 async function saveOrders(req, res, status) {
    let userId = 1
-   let { item, ...others } = req.session.cert.getCert();
+   let { items, ...others } = req.session.cart.getCart();
    let order = await models.Order.create({
-      usersId,
+      userId,
       ...others,
       status
    })
    let orderDetails = []
-   items.array.forEach(item => {
+   items.forEach(item => {
       orderDetails.push({
          orderId: order.id,
          productId: item.product.id,
@@ -66,9 +66,10 @@ async function saveOrders(req, res, status) {
          total: item.total
       })
    });
+   // bulkCreate them 1 mang vao trong bang
    await models.OrderDetail.bulkCreate(orderDetails)
-   req.session.cert.clear()
-   return res.render('error', { message: 'Thank you for your order!' })
+   req.session.cart.clear()
+   return res.render('error', { Message: 'Thank you for your order!' })
 }
 
 module.exports = controller

@@ -38,9 +38,9 @@
                                             <td>${{product.price}}</td>
                                             <td>
                                                 <div class="qty">
-                                                    <button class="btn-minus" onclick="updateCart({{product.id}},parseInt(document.getElementById('quantity{{product.id}}')).value -1)"><i class="fa fa-minus"></i></button>
-                                                    <input type="number" value="{{quantity}}" readonly id="quantity{{product.id}}">
-                                                    <button class="btn-plus"  onclick="updateCart({{product.id}},parseInt(document.getElementById('quantity{{product.id}}')).value +1)"><i class="fa fa-plus"></i></button>
+                                                    <button class="btn-minus" onclick="updateCart({{product.id}},parseInt(document.getElementById('quantity{{product.id}}').value) -1)"><i class="fa fa-minus"></i></button>
+                                                    <input type="number" value="{{quantity}}" readonly id="quantity{{product.id}}" name="quantity">
+                                                    <button class="btn-plus"  onclick="updateCart({{product.id}},parseInt(document.getElementById('quantity{{product.id}}').value) +1)"><i class="fa fa-plus"></i></button>
                                                 </div>
                                             </td>
                                             <td id="total{{product.id}}">${{total}}</td>
@@ -63,7 +63,7 @@
                         <div class="cart-summary">
                             <div class="cart-content">
                                 <h3>Cart Summary</h3>
-                                <p>Sub Total<span id="subtotal">$2{{subtotal}}</span></p>
+                                <p>Sub Total<span id="subtotal">${{subtotal}}</span></p>
                                 <p>Shipping Cost<span>${{shipping}}</span></p>
                                 <h4>Grand Total<span id="total">${{total}}</span></h4>
                             </div>
