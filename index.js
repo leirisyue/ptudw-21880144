@@ -4,9 +4,16 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 5000;
 const expressHandlebars = require('express-handlebars')
-const {createStarList} = require('./controllers/handlebarsHelper')
-const {createPagination} = require('express-handlebars-paginate')
+const { createStarList } = require('./controllers/handlebarsHelper')
+const { createPagination } = require('express-handlebars-paginate')
 const session = require('express-session')
+const redisStore = require('connect-redis').default;
+const { createClient } = require('redis');
+const redisClient = createClient({
+   // url: 'rediss://red-chkl6hu4dadfmsmjbd3g:HCtHRgrDXAyM569nDs39qLv1geeb4Lus@oregon-redis.render.com:6379'
+   url:"redis://red-chkl6hu4dadfmsmjbd3g:6379"
+})
+redisClient.connect().catch(console.error);
 
 // set up public static folder
 app.use(express.static(__dirname + '/public'));
@@ -17,11 +24,11 @@ app.engine('hbs', expressHandlebars.engine({
    partialsDir: __dirname + '/views/partials',
    extname: 'hbs',
    defaultLayout: 'layout',
-   runtimeOptions:{
+   runtimeOptions: {
       allowProtoPropertiesByDefault: true
    },
-   helpers:{
-      createStarList,createPagination
+   helpers: {
+      createStarList, createPagination
    }
 }))
 
@@ -30,19 +37,22 @@ app.set('view engine', 'hbs');
 
 // session
 app.use(express.json())
-app.use(express.urlencoded({extended:false}))
+app.use(express.urlencoded({ extended: false }))
 app.use(session({
    secret: 'S3crect',
+   store: new redisStore({
+      client: redisClient
+   }),
    resave: false,
    saveUninitialized: false,
-   cookie:{
+   cookie: {
       httpOnly: true,
-      maxAge: 20*60*1000 //20ph
+      maxAge: 20 * 60 * 1000 //20ph
    }
 }))
 
 // middleware cart
-app.use((req,res,next)=>{
+app.use((req, res, next) => {
    let Cart = require('./controllers/cart')
    req.session.cart = new Cart(req.session.cart ? req.session.cart : {})
    res.locals.quantity = req.session.cart.quantity
@@ -52,14 +62,14 @@ app.use((req,res,next)=>{
 
 // routes
 app.use('/', require('./routes/indexRouter'));
-app.use('/products',require('./routes/productsRouter'))
-app.use('/users',require('./routes/usersRouter'))
+app.use('/products', require('./routes/productsRouter'))
+app.use('/users', require('./routes/usersRouter'))
 app.use((req, res, next) => {
    res.status(404).render('error', { Message: 'File not found' })
 })
 
 app.use((error, req, res, next) => {
-   console.error('error '+ error);
+   console.error('error ' + error);
    res.status(500).render('error', { Message: 'Internal Server Error' })
 })
 
