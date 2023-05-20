@@ -14,6 +14,7 @@ async function addCart(id, quantity) {
 }
 
 async function updateCart(id, quantity) {
+   console.log("🚀 ~ updateCart ~ quantity:", quantity);
    if (quantity > 0) {
       let res = await fetch('/products/cart', {
          method: 'PUT',
@@ -79,16 +80,4 @@ async function clearCart() {
          </div>`
       }
    }
-}
-
-function placeorders(e) {
-   e.preventDefault();
-
-   const addressId = document.querySelector('input[name=addressId]:checked')
-   if (!addressId || addressId.value == 0) {
-      if (!e.target.checkValidity()) {
-         return e.target.reportValidity()
-      }
-   }
-   e.target.submit()
 }
