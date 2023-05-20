@@ -1,4 +1,5 @@
 'use strick';
+require('dotenv').config();
 
 const express = require('express');
 const app = express();
@@ -10,8 +11,7 @@ const session = require('express-session')
 const redisStore = require('connect-redis').default;
 const { createClient } = require('redis');
 const redisClient = createClient({
-   // url: 'rediss://red-chkl6hu4dadfmsmjbd3g:HCtHRgrDXAyM569nDs39qLv1geeb4Lus@oregon-redis.render.com:6379'
-   url:"redis://red-chkl6hu4dadfmsmjbd3g:6379"
+   url: process.env.REDIS_URL
 })
 redisClient.connect().catch(console.error);
 
@@ -39,7 +39,7 @@ app.set('view engine', 'hbs');
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(session({
-   secret: 'S3crect',
+   secret: process.env.SESSION_SECRET,
    store: new redisStore({
       client: redisClient
    }),
