@@ -32,12 +32,18 @@ controller.showHomepage = async (req, res) => {
    //-------------------------------index.Brand-----------------------------------
    const Brand = models.Brand;
    const brands = await Brand.findAll();
+   //
+   res.header("Content-Type", "text/html")
+   //
    res.render('index', { brands }); // res.render('index', { brands: brands });
 }
 
 controller.showPage = (req, res, next) => {
    const pages = [ 'checkout', 'contact', 'login', 'my-account', 'product-detail', 'product-list', 'wishlist'];
    if (pages.includes(req.params.page)) {
+       //
+      res.header("Content-Type", "text/html")
+      //
       return res.render(req.params.page);
    }
    next();
