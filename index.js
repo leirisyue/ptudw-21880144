@@ -56,7 +56,9 @@ app.use((req, res, next) => {
    let Cart = require('./controllers/cart')
    req.session.cart = new Cart(req.session.cart ? req.session.cart : {})
    res.locals.quantity = req.session.cart.quantity
-
+   // 1007
+   res.header("Content-Type", "text/html")
+   // end 1007
    next()
 })
 
